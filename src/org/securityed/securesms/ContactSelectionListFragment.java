@@ -350,8 +350,6 @@ public final class ContactSelectionListFragment extends    Fragment
         if (onContactSelectedListener != null)
           onContactSelectedListener.onContactDeselected(contact.getNumber());
       }
-
-
     }
   }
 
@@ -371,4 +369,5 @@ public final class ContactSelectionListFragment extends    Fragment
   public interface InviteCallback {
     void onInvite();
   }
+
 }

@@ -148,6 +148,9 @@ public class ConversationListFragment extends Fragment
       cameraFab.show();
     }
 
+    // hide the camera because it wants access to the contacts. We don't want that.
+    cameraFab.hide();
+
     reminderView.setOnDismissListener(() -> updateReminders(true));
 
     list.setHasFixedSize(true);
