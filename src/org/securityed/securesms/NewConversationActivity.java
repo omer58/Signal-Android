@@ -23,11 +23,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.securityed.securesms.conversation.ConversationActivity;
 import org.securityed.securesms.database.DatabaseFactory;
 import org.securityed.securesms.database.ThreadDatabase;
 import org.securityed.securesms.recipients.Recipient;
+import org.securityed.securesms.util.TextSecurePreferences;
+
+import java.util.Set;
 
 /**
  * Activity container for starting a new conversation.
@@ -55,19 +59,31 @@ public class NewConversationActivity extends ContactSelectionActivity
 
 
     Log.d("onContactSelected", "new conversation  " + number);
+    Set<String> allowedNumbers = TextSecurePreferences.getAllowedNumbers(getApplicationContext());
 
-    Intent intent = new Intent(this, ConversationActivity.class);
-    intent.putExtra(ConversationActivity.RECIPIENT_EXTRA, recipient.getId());
-    intent.putExtra(ConversationActivity.TEXT_EXTRA, getIntent().getStringExtra(ConversationActivity.TEXT_EXTRA));
-    intent.putExtra(ConversationActivity.NEW_CONVERSATION, "new conversation");
-    intent.setDataAndType(getIntent().getData(), getIntent().getType());
 
-    long existingThread = DatabaseFactory.getThreadDatabase(this).getThreadIdIfExistsFor(recipient);
+    // TODO: find a better way of checking against numbers?
+    if( allowedNumbers.contains( "+1" + number)){
 
-    intent.putExtra(ConversationActivity.THREAD_ID_EXTRA, existingThread);
-    intent.putExtra(ConversationActivity.DISTRIBUTION_TYPE_EXTRA, ThreadDatabase.DistributionTypes.DEFAULT);
-    startActivity(intent);
-    finish();
+      Intent intent = new Intent(this, ConversationActivity.class);
+      intent.putExtra(ConversationActivity.RECIPIENT_EXTRA, recipient.getId());
+      intent.putExtra(ConversationActivity.TEXT_EXTRA, getIntent().getStringExtra(ConversationActivity.TEXT_EXTRA));
+      intent.putExtra(ConversationActivity.NEW_CONVERSATION, "new conversation");
+      intent.setDataAndType(getIntent().getData(), getIntent().getType());
+
+      long existingThread = DatabaseFactory.getThreadDatabase(this).getThreadIdIfExistsFor(recipient);
+
+      intent.putExtra(ConversationActivity.THREAD_ID_EXTRA, existingThread);
+      intent.putExtra(ConversationActivity.DISTRIBUTION_TYPE_EXTRA, ThreadDatabase.DistributionTypes.DEFAULT);
+      startActivity(intent);
+      finish();
+
+    } else {
+      Toast.makeText(getApplicationContext(), R.string.please_enter_the_number_given_to_you, Toast.LENGTH_LONG ).show();
+
+    }
+
+
   }
 
   @Override

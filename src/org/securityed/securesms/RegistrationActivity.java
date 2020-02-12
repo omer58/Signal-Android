@@ -49,6 +49,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.securityed.securesms.animation.AnimationCompleteListener;
 import org.securityed.securesms.backup.FullBackupBase;
 import org.securityed.securesms.backup.FullBackupImporter;
@@ -102,10 +103,15 @@ import org.whispersystems.signalservice.internal.push.LockedException;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * The register account activity.  Prompts the user for their registration information
@@ -225,13 +231,42 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
           SystemClock.sleep(1000);
         }
 
-        String[] resp = regCode.split("_");
-        Log.d("registration code resp", resp[0] + "_" +  resp[1] + "_");
-        regCode = resp[0];
-        Boolean isExperimentalGroup = resp[1].equals("1");
+        JSONObject response = null;
+        Boolean isExperimentalGroup = false;
+        try{
+
+          response = new JSONObject(regCode);
+          Log.d("json response", response.toString());
+
+          regCode = response.getString("sms_code");
+          isExperimentalGroup = response.getString("exp_group").equals("1");
+          TextSecurePreferences.setExperimentalGroup(getApplicationContext(), isExperimentalGroup);
+
+          JSONArray numbers = response.getJSONArray("valid_numbers");
+
+          Set<String> numbers_allowed = new HashSet<String>();
+
+          for( int i = 0; i < numbers.length(); i++){
+
+            numbers_allowed.add(numbers.getString(i));
+            Log.d("array item: ", numbers.getString(i) );
+
+          }
+
+          TextSecurePreferences.setAllowedNumbers( getApplicationContext(), numbers_allowed);
+          Log.d( "array items: ", numbers_allowed.toString());
+          Log.d("array items prefs: ", TextSecurePreferences.getAllowedNumbers( getApplicationContext()).toString() );
 
 
-        TextSecurePreferences.setExperimentalGroup(getApplicationContext(), isExperimentalGroup);
+
+
+
+        } catch (JSONException e){
+
+          Log.d("registration json problems", e.getMessage());
+
+        }
+
 
         Log.d("isExperimentalGroup", "" +  isExperimentalGroup);
         Log.d("experimentalness: ", "" + TextSecurePreferences.isExperimentalGroup(getApplicationContext()));

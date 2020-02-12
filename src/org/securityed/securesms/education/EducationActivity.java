@@ -81,6 +81,7 @@ public class EducationActivity extends BaseActionBarActivity {
                         throw new IllegalStateException("Was not supplied a next_intent.");
                     }
 
+                    ///////////take this block out of onAnyResult and comment out .execute to disable permissions. probably. needs to be tested.
                     Calendar exitTime = GregorianCalendar.getInstance();
                     EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
                             TextSecurePreferences.getLocalNumber(this), "splash-screen-cont-exit",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), exitTime.getTimeInMillis()- launchTime.getTimeInMillis()));
@@ -89,6 +90,7 @@ public class EducationActivity extends BaseActionBarActivity {
                     startActivity(nextIntent);
                     overridePendingTransition(R.anim.slide_from_end, R.anim.fade_scale_out);
                     finish();
+                    //////////// end of block
                 })
                 .execute();
     }

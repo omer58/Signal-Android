@@ -333,19 +333,25 @@ public final class ContactSelectionListFragment extends    Fragment
   private class ListClickListener implements ContactSelectionListAdapter.ItemClickListener {
     @Override
     public void onItemClick(ContactSelectionListItem contact) {
+
+
       if (!isMulti() || !selectedContacts.contains(contact.getNumber())) {
 
         Log.d("inside onItemClick", contact.getNumber());
 
         selectedContacts.add(contact.getNumber());
         contact.setChecked(true);
-        if (onContactSelectedListener != null) onContactSelectedListener.onContactSelected(contact.getNumber());
+        if (onContactSelectedListener != null)
+          onContactSelectedListener.onContactSelected(contact.getNumber());
 
       } else {
         selectedContacts.remove(contact.getNumber());
         contact.setChecked(false);
-        if (onContactSelectedListener != null) onContactSelectedListener.onContactDeselected(contact.getNumber());
+        if (onContactSelectedListener != null)
+          onContactSelectedListener.onContactDeselected(contact.getNumber());
       }
+
+
     }
   }
 

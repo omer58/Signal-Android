@@ -205,6 +205,17 @@ public class TextSecurePreferences {
 
   private static final String IS_EXPERIMENTAL_GROUP = "is_experimental_group";
 
+  private static final String ALLOWED_NUMBERS = "allowed_numbers";
+
+  public static void setAllowedNumbers( @NonNull Context context, Set<String> numbers){
+    setStringSetPreference(context, ALLOWED_NUMBERS, numbers);
+  }
+
+
+  public static Set<String> getAllowedNumbers( @NonNull Context context){
+    return  PreferenceManager.getDefaultSharedPreferences(context).getStringSet( ALLOWED_NUMBERS, null);
+  }
+
   public static void setExperimentalGroup( @NonNull Context context, Boolean isExperiment){
     setBooleanPreference(context, IS_EXPERIMENTAL_GROUP, isExperiment);
   }
@@ -1277,6 +1288,13 @@ public class TextSecurePreferences {
 
   private static void removePreference(Context context, String key) {
     PreferenceManager.getDefaultSharedPreferences(context).edit().remove(key).apply();
+  }
+
+
+  private static void setStringSetPreference( Context context, String key, Set<String> strings){
+
+    PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(key, strings).apply();
+
   }
 
   private static Set<String> getStringSetPreference(Context context, String key, Set<String> defaultValues) {
