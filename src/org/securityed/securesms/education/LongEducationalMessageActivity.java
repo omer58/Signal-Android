@@ -49,12 +49,12 @@ public class LongEducationalMessageActivity extends BaseActionBarActivity {
         getSupportActionBar().setTitle(R.string.more_about_e2ee);
 
 
+        Log.d("longactivity", "onCreate()");
 
 
         setContentView(R.layout.long_message_activity);
         overridePendingTransition(R.anim.slide_from_end, R.anim.slide_to_start);
 
-        Log.d("long educational messge", "on create");
 
 
         // this is notification code.
@@ -86,6 +86,8 @@ public class LongEducationalMessageActivity extends BaseActionBarActivity {
         }
         super.onPause();
 
+        Log.d("longactivity", "onPause()");
+
         String log = EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "long-message", EducationalMessageManager.LONG_MESSAGE_SCREEN, "na", openDate, GregorianCalendar.getInstance().getTime().getTime() - openDate.getTime());
         EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN, log);
     }
@@ -101,6 +103,7 @@ public class LongEducationalMessageActivity extends BaseActionBarActivity {
         EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN, log);
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

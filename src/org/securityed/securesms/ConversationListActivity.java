@@ -167,7 +167,7 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
           }
           return null;
         }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+      };//.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); this disables the blue tooltip.
 
 
     } catch ( RuntimeException e){

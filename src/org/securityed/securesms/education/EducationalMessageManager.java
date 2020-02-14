@@ -41,6 +41,7 @@ public class EducationalMessageManager {
     public static final int TOOL_TIP_MESSAGE = 1;
     public static final int OPENING_SCREEN_MESSAGE = 2;
     public static final int LONG_MESSAGE_SCREEN = 3;
+    public static final int PROFILE_CREATE_SCREEN = 4;
 
     public static final String MESSAGE_SHOWN = "message_shown";
     public static final String MESSAGE_EXCHANGE = "message_exchange";

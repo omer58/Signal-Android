@@ -65,6 +65,8 @@ public class EducationActivity extends BaseActionBarActivity {
     }
 
     private void onContinueClicked() {
+
+        /*
         Permissions.with(this)
                 //Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS,Manifest.permission.READ_PHONE_STATE
                 .request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
@@ -73,26 +75,30 @@ public class EducationActivity extends BaseActionBarActivity {
                 .withRationaleDialog(getString(R.string.RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends),
                         R.drawable.ic_contacts_white_48dp, R.drawable.ic_folder_white_48dp)
                 .onAnyResult(() -> {
-                    EducationalMessageManager.unarmEducation(EducationActivity.this);
-
-                    Intent nextIntent = getIntent().getParcelableExtra("next_intent");
-
-                    if (nextIntent == null) {
-                        throw new IllegalStateException("Was not supplied a next_intent.");
-                    }
-
-                    ///////////take this block out of onAnyResult and comment out .execute to disable permissions. probably. needs to be tested.
-                    Calendar exitTime = GregorianCalendar.getInstance();
-                    EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
-                            TextSecurePreferences.getLocalNumber(this), "splash-screen-cont-exit",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), exitTime.getTimeInMillis()- launchTime.getTimeInMillis()));
 
 
-                    startActivity(nextIntent);
-                    overridePendingTransition(R.anim.slide_from_end, R.anim.fade_scale_out);
-                    finish();
-                    //////////// end of block
                 })
                 .execute();
+        */
+
+        ///////////take this block out of onAnyResult and comment out .execute to disable permissions. probably. needs to be tested.
+        EducationalMessageManager.unarmEducation(EducationActivity.this);
+
+        Intent nextIntent = getIntent().getParcelableExtra("next_intent");
+
+        if (nextIntent == null) {
+            throw new IllegalStateException("Was not supplied a next_intent.");
+        }
+
+        Calendar exitTime = GregorianCalendar.getInstance();
+        EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
+                TextSecurePreferences.getLocalNumber(this), "splash-screen-cont-exit",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), exitTime.getTimeInMillis()- launchTime.getTimeInMillis()));
+
+
+        startActivity(nextIntent);
+        overridePendingTransition(R.anim.slide_from_end, R.anim.fade_scale_out);
+        finish();
+        //////////// end of block
     }
 }
 

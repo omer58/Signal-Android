@@ -39,6 +39,8 @@ import org.securityed.securesms.crypto.ProfileKeyUtil;
 import org.securityed.securesms.database.Address;
 import org.securityed.securesms.database.DatabaseFactory;
 import org.securityed.securesms.dependencies.ApplicationDependencies;
+import org.securityed.securesms.education.EducationalMessage;
+import org.securityed.securesms.education.EducationalMessageManager;
 import org.securityed.securesms.jobs.MultiDeviceProfileKeyUpdateJob;
 import org.securityed.securesms.logging.Log;
 import org.securityed.securesms.mms.GlideApp;
@@ -64,6 +66,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 
 @SuppressLint("StaticFieldLeak")
@@ -84,6 +88,10 @@ public class CreateProfileActivity extends BaseActionBarActivity {
   private EmojiToggle            emojiToggle;
   private MediaKeyboard          mediaKeyboard;
   private View                   reveal;
+  private TextView               descriptionText;
+
+  private Date openDate;
+  private EducationalMessage shortMessage;
 
   private Intent nextIntent;
   private byte[] avatarBytes;
@@ -111,6 +119,24 @@ public class CreateProfileActivity extends BaseActionBarActivity {
     super.onResume();
     dynamicTheme.onResume(this);
     dynamicLanguage.onResume(this);
+
+    if(TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
+      openDate =  GregorianCalendar.getInstance().getTime();
+      String log = EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "create-profile", EducationalMessageManager.PROFILE_CREATE_SCREEN, shortMessage.getMessageName(), openDate, -1);
+      EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN, log);
+    }
+
+  }
+
+
+  @Override
+  public void onPause() {
+    super.onPause();
+
+    if(TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
+      String log = EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "create-profile", EducationalMessageManager.PROFILE_CREATE_SCREEN, shortMessage.getMessageName(), openDate, GregorianCalendar.getInstance().getTime().getTime() - openDate.getTime());
+      EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN, log);
+    }
   }
 
   @Override
@@ -203,7 +229,15 @@ public class CreateProfileActivity extends BaseActionBarActivity {
     this.container    = ViewUtil.findById(this, R.id.container);
     this.finishButton = ViewUtil.findById(this, R.id.finish_button);
     this.reveal       = ViewUtil.findById(this, R.id.reveal);
+    this.descriptionText = ViewUtil.findById(this, R.id.description_text);
+
     this.nextIntent   = getIntent().getParcelableExtra(NEXT_INTENT);
+
+
+    if( TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
+      shortMessage = EducationalMessageManager.getShortMessage(getApplicationContext());
+      descriptionText.setText(shortMessage.getStringID());
+    }
 
     /*this.avatar.setOnClickListener(view -> Permissions.with(this)
                                                       .request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -211,6 +245,8 @@ public class CreateProfileActivity extends BaseActionBarActivity {
                                                       .onAnyResult(this::startAvatarSelection)
                                                       .execute());
     */
+
+
 
     this.name.getInput().addTextChangedListener(new TextWatcher() {
       @Override
