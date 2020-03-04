@@ -237,6 +237,10 @@ public class CreateProfileActivity extends BaseActionBarActivity {
     if( TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
       shortMessage = EducationalMessageManager.getShortMessage(getApplicationContext());
       descriptionText.setText(shortMessage.getStringID());
+
+      //need to send notifications. 
+    } else {
+      descriptionText.setText(R.string.setup_profile_control);
     }
 
     /*this.avatar.setOnClickListener(view -> Permissions.with(this)

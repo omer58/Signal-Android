@@ -56,6 +56,9 @@
     <string name="please_enter_the_number_given_to_you"> Please enter the number given to you</string>
 
 
+    <string name="setup_profile_control">Enter you profile name to get started with TextLight. Alternatively you can hit set it later.</string>
+
+
 
     <string name="learn_more">Learn More</string>
 
