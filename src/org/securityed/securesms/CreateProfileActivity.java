@@ -133,8 +133,10 @@ public class CreateProfileActivity extends BaseActionBarActivity {
   public void onPause() {
     super.onPause();
 
+    long timeElapsed = GregorianCalendar.getInstance().getTime().getTime() - openDate.getTime();
+
     if(TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
-      String log = EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "create-profile", EducationalMessageManager.PROFILE_CREATE_SCREEN, shortMessage.getMessageName(), openDate, GregorianCalendar.getInstance().getTime().getTime() - openDate.getTime());
+      String log = EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "create-profile", EducationalMessageManager.PROFILE_CREATE_SCREEN, shortMessage.getMessageName(), openDate, timeElapsed );
       EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN, log);
     }
   }
