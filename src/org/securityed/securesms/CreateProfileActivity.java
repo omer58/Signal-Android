@@ -238,7 +238,7 @@ public class CreateProfileActivity extends BaseActionBarActivity {
       shortMessage = EducationalMessageManager.getShortMessage(getApplicationContext());
       descriptionText.setText(shortMessage.getStringID());
 
-      //need to send notifications. 
+      //need to send notifications.
     } else {
       descriptionText.setText(R.string.setup_profile_control);
     }

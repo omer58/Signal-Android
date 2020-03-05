@@ -36,7 +36,8 @@ public class DeviceProvisioningActivity extends PassphraseRequiredActionBarActiv
         .setOnDismissListener(dialog13 -> finish())
         .create();
 
-    dialog.setIcon(getResources().getDrawable(R.drawable.icon_dialog));
+    // could this lead to a crash??
+    dialog.setIcon(getResources().getDrawable(R.mipmap.ic_launcher));
     dialog.show();
   }
 }

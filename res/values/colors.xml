@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+    <color name="umd_red">#E21833</color>
+
     <color name="signal_primary">#ff2090ea</color>
     <color name="signal_primary_dark">#ff1c7ac5</color>
     <color name="signal_primary_alpha33">#552090ea</color>
