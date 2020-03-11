@@ -60,6 +60,9 @@ public class NewConversationActivity extends ContactSelectionActivity
     Set<String> allowedNumbers = TextSecurePreferences.getAllowedNumbers(getApplicationContext());
 
 
+    number = number.replace("(", "").replace(")", "").replace(" ", "").replace("-", "");
+
+
     boolean goodEnough = false;
     String numberToText = "";
     for( String allowedNumber:allowedNumbers){
