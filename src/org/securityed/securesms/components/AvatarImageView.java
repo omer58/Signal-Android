@@ -95,6 +95,11 @@ public final class AvatarImageView extends AppCompatImageView {
   }
 
   public void setAvatar(@NonNull GlideRequests requestManager, @Nullable Recipient recipient, boolean quickContactEnabled) {
+
+
+    // this should disable the button that let's participants add the number to their contacts easily.
+    quickContactEnabled = false;
+
     if (recipient != null) {
       RecipientContactPhoto photo = new RecipientContactPhoto(recipient);
 

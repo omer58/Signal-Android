@@ -414,7 +414,7 @@ public class CreateProfileActivity extends BaseActionBarActivity {
           String givenNumber = TextSecurePreferences.getLocalNumber(getApplicationContext());
 
           accountManager.setProfileName(profileKey, givenNumber ); //name
-          TextSecurePreferences.setProfileName(context, givenNumber ); //name
+          TextSecurePreferences.setProfileName(context, name ); //name
           DatabaseFactory.getRecipientDatabase(context).setProfileName(Recipient.self().getId(), givenNumber); //name
         } catch (IOException e) {
           Log.w(TAG, e);

@@ -29,6 +29,7 @@ import org.securityed.securesms.conversation.ConversationActivity;
 import org.securityed.securesms.database.DatabaseFactory;
 import org.securityed.securesms.database.ThreadDatabase;
 import org.securityed.securesms.recipients.Recipient;
+import org.securityed.securesms.util.Levenshtein;
 import org.securityed.securesms.util.TextSecurePreferences;
 
 import java.util.Set;
@@ -55,15 +56,30 @@ public class NewConversationActivity extends ContactSelectionActivity
 
   @Override
   public void onContactSelected(String number) {
-    Recipient recipient = Recipient.external(this, number);
 
-
-    Log.d("onContactSelected", "new conversation  " + number);
     Set<String> allowedNumbers = TextSecurePreferences.getAllowedNumbers(getApplicationContext());
 
 
-    // TODO: find a better way of checking against numbers?
-    if( allowedNumbers.contains( "+1" + number)){
+    boolean goodEnough = false;
+    String numberToText = "";
+    for( String allowedNumber:allowedNumbers){
+
+      if(Levenshtein.distance(number, allowedNumber) <= 3){
+        goodEnough = true;
+        numberToText = allowedNumber;
+
+      }
+    }
+
+
+
+    if( goodEnough){
+
+      Recipient recipient = Recipient.external(this, numberToText);
+
+      Log.d( "recipient", recipient.toShortString());
+
+      Log.d("onContactSelected", "new conversation  " + numberToText);
 
       Intent intent = new Intent(this, ConversationActivity.class);
       intent.putExtra(ConversationActivity.RECIPIENT_EXTRA, recipient.getId());
@@ -80,7 +96,6 @@ public class NewConversationActivity extends ContactSelectionActivity
 
     } else {
       Toast.makeText(getApplicationContext(), R.string.please_enter_the_number_given_to_you, Toast.LENGTH_LONG ).show();
-
     }
 
 

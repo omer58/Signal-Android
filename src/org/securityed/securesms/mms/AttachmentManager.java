@@ -74,6 +74,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static org.webrtc.ContextUtils.getApplicationContext;
+
 
 public class AttachmentManager {
 
@@ -395,6 +397,12 @@ public class AttachmentManager {
   }
 
   public static void selectContactInfo(Activity activity, int requestCode) {
+
+
+    Toast.makeText(getApplicationContext(), R.string.dont_share_contacts, Toast.LENGTH_SHORT ).show();
+
+    /*
+
     Permissions.with(activity)
                .request(Manifest.permission.WRITE_CONTACTS)
                .ifNecessary()
@@ -404,6 +412,9 @@ public class AttachmentManager {
                  activity.startActivityForResult(intent, requestCode);
                })
                .execute();
+
+
+     */
   }
 
   public static void selectLocation(Activity activity, int requestCode) {

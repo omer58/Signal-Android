@@ -207,6 +207,8 @@ public class TextSecurePreferences {
 
   private static final String ALLOWED_NUMBERS = "allowed_numbers";
 
+  private static final String WAS_CONVERSATION_SHOWN_ONCE = "was_conversation_shown_once";
+
   public static void setAllowedNumbers( @NonNull Context context, Set<String> numbers){
     setStringSetPreference(context, ALLOWED_NUMBERS, numbers);
   }
@@ -246,6 +248,7 @@ public class TextSecurePreferences {
   }
 
   public static int incrementLastMessageSeen( @NonNull Context context){
+    //TODO the comment below.
     //might want to check for overflows.
 
     int timesOpened = getIntegerPreference(context, NUM_SHORT_MESSAGE_SHOWN, 0);
@@ -268,6 +271,7 @@ public class TextSecurePreferences {
     return getBooleanPreference(context, EDUCATIONAL_MESSAGE_SHOW_STATUS, false);
   }
 
+
   public static void armEducation( @NonNull Context context){
     setBooleanPreference(context, EDUCATIONAL_MESSAGE_SHOW_STATUS, true);
 
@@ -285,6 +289,26 @@ public class TextSecurePreferences {
       return true;
     return false;
   }
+
+
+  public static int getNumLaunches( @NonNull Context context){
+    return getIntegerPreference(context, NUM_ACTIVITY_LAUNCHES, 0);
+  }
+
+
+  public static void setWasConversationShownOnce( @NonNull Context context, boolean wasShown){
+
+    setBooleanPreference(context, WAS_CONVERSATION_SHOWN_ONCE, wasShown);
+
+  }
+
+  public static boolean getWasConversationShownOnce( @NonNull Context context){
+
+    return getBooleanPreference(context, WAS_CONVERSATION_SHOWN_ONCE, false);
+
+  }
+
+
 
 
   public static boolean isScreenLockEnabled(@NonNull Context context) {

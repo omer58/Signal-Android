@@ -3,6 +3,7 @@ package org.securityed.securesms.education;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class EducationActivity extends BaseActionBarActivity {
 
     Calendar launchTime = null;
     EducationalMessage em = null;
+    TextView shortMessageView = null;
 
 
     @Override
@@ -29,7 +31,14 @@ public class EducationActivity extends BaseActionBarActivity {
         setContentView(R.layout.education_activity);
         findViewById(R.id.education_more_button).setOnClickListener(v -> onTermsClicked());
         findViewById(R.id.welcome_continue_button).setOnClickListener(v -> onContinueClicked());
-        TextView shortMessageView = findViewById(R.id.educationMessageView);
+        shortMessageView = findViewById(R.id.educationMessageView);
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
         em = EducationalMessageManager.getShortMessage(this);
         shortMessageView.setText( em.getMessageString(this));
 
@@ -38,12 +47,6 @@ public class EducationActivity extends BaseActionBarActivity {
         EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
                 TextSecurePreferences.getLocalNumber(this), "splash-screen",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), -1));
 
-
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
     }
 
     @Override
@@ -91,8 +94,14 @@ public class EducationActivity extends BaseActionBarActivity {
         }
 
         Calendar exitTime = GregorianCalendar.getInstance();
-        EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
-                TextSecurePreferences.getLocalNumber(this), "splash-screen-cont-exit",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), exitTime.getTimeInMillis()- launchTime.getTimeInMillis()));
+        String log = EducationalMessageManager.getMessageShownLogEntry(
+                TextSecurePreferences.getLocalNumber(this),
+                "splash-screen-cont-exit",
+                EducationalMessageManager.OPENING_SCREEN_MESSAGE,
+                em.getMessageName(),
+                launchTime.getTime(),
+                exitTime.getTimeInMillis() - launchTime.getTimeInMillis());
+        EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, log);
 
 
         startActivity(nextIntent);

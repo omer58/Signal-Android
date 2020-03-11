@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -50,6 +52,10 @@ public class EducationalMessageManager {
     public static final int GET_PHONE_NUM = 1;
     public static final int CONTROL_PHONE_NUM = 2;
 
+
+    // Show message once per every OPENING_FREQUENCY.
+    public static final int OPENING_FREQUENCY = 3;
+
     private static String serverResponseCode = null;
 
 
@@ -74,19 +80,49 @@ public class EducationalMessageManager {
 
         switch(messagePlaceCode){
         case IN_CONVERSATION_MESSAGE:
-            return false;
+            return isInConversationTurn(context);
         case TOOL_TIP_MESSAGE:
             return true;
         case OPENING_SCREEN_MESSAGE:
             //TODO migrate this function to this class.
-            return TextSecurePreferences.hasNotSeenEducationalMessageInAWhile(context);
+            return hasNotSeenEducationalMessageInAWhile(context);
         default:
             return false;
         }
 
     }
 
-    //TODO fix this thing. we want the timezone together with the unix time.
+
+    public static boolean isInConversationTurn( Context context){
+
+        if( TextSecurePreferences.getNumLaunches(context) % (OPENING_FREQUENCY * 2) == 0) {
+            boolean wasConversationShownOnce = TextSecurePreferences.getWasConversationShownOnce(context);
+
+            if( !wasConversationShownOnce){
+                TextSecurePreferences.setWasConversationShownOnce(context, true);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    public static boolean hasNotSeenEducationalMessageInAWhile( Context context){
+
+        if( TextSecurePreferences.getNumLaunches(context) % OPENING_FREQUENCY != 0){
+
+            TextSecurePreferences.setWasConversationShownOnce(context, false);
+        }
+
+        if(TextSecurePreferences.getNumLaunches(context) % OPENING_FREQUENCY == 0 && TextSecurePreferences.getNumLaunches(context) % (OPENING_FREQUENCY * 2) != 0)
+            return true;
+        return false;
+    }
+
+
+
     private static String formatDateString( Date date){
         return date.toString().replace(" ", "_").replace(":", "-") + "_" + date.getTime();
     }
@@ -99,10 +135,16 @@ public class EducationalMessageManager {
         return phoneNumber + "_" + sent + "_" + messageType + "_" + formatDateString(date);
     }
 
-    public static void notifyStatServer(Context context, String args ){
+    public static void notifyStatServerProper(Context context, String args ){
 
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = "https://akgul.cs.umd.edu/post_stats/?" + args;
+
+
+        if( args.equals("") || args.equals(" ") || args == null){
+
+            Log.d("smth wrong with args", Log.getStackTraceString(new Exception()) + "\n" + args);
+        }
 
         StringRequest stringRequest = new StringRequest(StringRequest.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -117,6 +159,8 @@ public class EducationalMessageManager {
 
                 Log.e("uhh", error.toString());
 
+                Log.e( "the url", url);
+
                 TextSecurePreferences.addToUnsentLogs(context, args);
             }
         });
@@ -127,7 +171,7 @@ public class EducationalMessageManager {
 
     public static void notifyStatServer(Context context, String logType, String log){
         String args = logType + "=" + log;
-        notifyStatServer(context, args);
+        notifyStatServerProper(context, args);
     }
 
 
@@ -231,6 +275,11 @@ public class EducationalMessageManager {
         return context.getResources().getString(stringID);
     }
 
+
+    // this is only called on launch of the application. There are edge cases where the server becomes
+    // online during a session and some get stored while others get sent. In that case the log file
+    // will lose it's chronological order. this could be easily fixed by just checking the timestamps.
+    // Therefore no fix will be implemented.
     public static void sendUnsentLogs(Context context){
 
         new AsyncTask<Void, Void, Void>(){
@@ -240,8 +289,16 @@ public class EducationalMessageManager {
                 String[] logs = TextSecurePreferences.getUnsentLogs(context);
                 TextSecurePreferences.deleteUnsentLogs(context);
 
+
+
                 for(String log:logs){
-                    notifyStatServer(context, log);
+
+                    if( log.equals("") || log.equals(" ") || log == null){
+                        continue;
+                    }
+                    Log.d("sending unsent", "sending sending!!");
+
+                    notifyStatServerProper(context, log);
                     SystemClock.sleep(200);
                 }
 

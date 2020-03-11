@@ -46,6 +46,8 @@
     </string>
 
 
+    <string name="dont_share_contacts">Button disabled, please don\'t share private information on TextLight</string>
+
     <string name="study_reminder">The topic is bla</string>
     <string name="study_reminder_title">Please don\'t forget touse the app today</string>
     <string name="study_reminder_action">Click to open TextLight for today\'s task</string>

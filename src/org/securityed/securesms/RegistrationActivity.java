@@ -569,6 +569,8 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
     PlayServicesStatus gcmStatus = PlayServicesUtil.getPlayServicesStatus(this);
 
     if (gcmStatus == PlayServicesStatus.SUCCESS) {
+
+      createButton.setEnabled(false);
       handleRequestVerification(e164number, true);
       Log.d("e164number", e164number);
     } else if (gcmStatus == PlayServicesStatus.MISSING) {
@@ -585,6 +587,8 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
   @SuppressLint("StaticFieldLeak")
   private void handleRequestVerification(@NonNull String e164number, boolean gcmSupported){
 
+    createButton.setEnabled(true);
+
     new AsyncTask<Void, Void, Void>(){
       @Override
       protected Void doInBackground(Void... vs){
@@ -593,22 +597,31 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
 
         String resp = EducationalMessageManager.registrationRequest( e164number, getApplicationContext(), EducationalMessageManager.CONTROL_PHONE_NUM);
 
-        if(resp.equals("true")){ // we got the verified number proceed with normal verification.
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              handleRequestVerification(e164number, gcmSupported, true, true);
-            }
-          });
-        } else {
-          Log.d("not an approved number.", e164number);
-          runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              Toast.makeText(getApplicationContext(), "not an approved number please use the number given to you.", Toast.LENGTH_SHORT).show();
-            }
-          });
+        Log.d("response", resp);
+
+        if(resp != null){ //TODO this needs to be checked.
+
+          if(resp.equals("true")){ // we got the verified number proceed with normal verification.
+            runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                handleRequestVerification(e164number, gcmSupported, true, true);
+              }
+            });
+          } else {
+            Log.d("not an approved number.", e164number);
+            runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                Toast.makeText(getApplicationContext(), "not an approved number please use the number given to you.", Toast.LENGTH_SHORT).show();
+              }
+            });
+          }
+
+
         }
+
+
 
 
         return null;
@@ -772,7 +785,8 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
             @Override
             public void onSuccess(Boolean r) {
               registrationState = new RegistrationState(RegistrationState.State.PIN, registrationState);
-              displayPinView(code, result.second);
+              //autoRegister();
+              //displayPinView(code, result.second);
             }
           });
         } else {

@@ -271,6 +271,12 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(icon);
 
+    icon.setImageResource(R.drawable.ic_profile_default);
+
+    String avatarId = String.valueOf(TextSecurePreferences.getProfileAvatarId(this));
+
+    Log.d("init profile pic id", avatarId);
+
     icon.setOnClickListener(v -> handleDisplaySettings());
   }
 
