@@ -267,7 +267,7 @@ public class ExperienceUpgradeActivity extends BaseActionBarActivity implements 
         {
           Notification notification = new NotificationCompat.Builder(context, NotificationChannels.OTHER)
               .setSmallIcon(R.drawable.icon_notification)
-              .setColor(context.getResources().getColor(R.color.umd_red)) //R.color.signal_primary
+              .setColor(context.getResources().getColor(R.color.signal_primary )) //R.color.signal_primary R.color.umd_red
               .setContentTitle(context.getString(R.string.ExperienceUpgradeActivity_unlock_to_complete_update))
               .setContentText(context.getString(R.string.ExperienceUpgradeActivity_please_unlock_signal_to_complete_update))
               .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(R.string.ExperienceUpgradeActivity_please_unlock_signal_to_complete_update)))
@@ -296,7 +296,7 @@ public class ExperienceUpgradeActivity extends BaseActionBarActivity implements 
 
         Notification notification = new NotificationCompat.Builder(context, NotificationChannels.OTHER)
                                         .setSmallIcon(R.drawable.icon_notification)
-                                        .setColor(context.getResources().getColor(R.color.umd_red))//R.color.signal_primary
+                                        .setColor(context.getResources().getColor(R.color.signal_primary ))//R.color.signal_primary  R.color.umd_red
                                         .setContentTitle(context.getString(experienceUpgrade.get().getNotificationTitle()))
                                         .setContentText(context.getString(experienceUpgrade.get().getNotificationText()))
                                         .setStyle(new NotificationCompat.BigTextStyle().bigText(context.getString(experienceUpgrade.get().getNotificationBigText())))
