@@ -14,11 +14,11 @@
     <string name="dummy">.</string>
 
     <!-- Study messages -->
-    <string name="short_v1">Messages in TextLight are end-to-end encrypted. This ensures that only you and the person you’re communicating with can read the messages you send and receive. Nobody in between can see the content of your messages.</string>
-    <string name="short_v2">Messages in TextLight are end-to-end encrypted. However, parties such as TextLight and your internet service provider (Verizon, T-mobile, etc.) may be able to tell that you are exchanging messages with someone, even if they can’t see what the messages say.</string>
-    <string name="short_v3">Messages in TextLight are end-to-end encrypted. However, end-to-end encryption cannot protect you from someone who gets their hands on your unlocked phone, or from a hacker who has successfully installed malicious software.</string>
-    <string name="short_v4">Messages in TextLight are end-to-end encrypted. Before a message ever leaves your device, it’s secured with a lock, and only you and your recipients have the keys to open the message and read it. </string>
-    <string name="short_v5">Messages in TextLight are end-to-end encrypted however, not all messaging apps use end-to-end encryption. Apps that do not use end-to-end encryption can read, change, or even sell your messages to other parties.</string>
+    <string name="short_v1">Messages in Textlight are end-to-end encrypted. End-to-end encryption ensures that only you and the person you’re communicating with can read the messages you send and receive. Nobody in between can see the content of your messages.</string>
+    <string name="short_v2">Messages in Textlight are end-to-end encrypted. However, parties such as TextLight and your internet/mobile service provider (Verizon, AT&amp;T, etc.) may still be able to tell that you are exchanging messages with someone, even if they can’t see what the messages say.</string>
+    <string name="short_v3">Messages in Textlight are end-to-end encrypted. However, end-to-end encryption cannot protect you from someone who gets their hands on your unlocked phone, or from a hacker who has successfully installed malicious software.</string>
+    <string name="short_v4">Messages in TextLight are end-to-end encrypted. End-to-end encryption ensures that before a message ever leaves your device, it’s secured with a lock, and only you and your recipients have the keys to open the message and read it.</string>
+    <string name="short_v5">Messages in Textlight are end-to-end encrypted however, not all messaging apps use end-to-end encryption. Apps that do not use end-to-end encryption can read, change, or even sell your messages to others.</string>
 
 
     <string name="mid_v1">Messages in TextLight are end-to-end encrypted. Before a message ever leaves your device, it’s secured with a lock, and only you and your recipients have the keys to open the message and read it. These keys are kept only on your devices, so TextLight never has access to  them.
@@ -42,7 +42,7 @@
 \t Not all messaging apps use end-to-end encryption. For example, SMS messaging is not encrypted. Apps that do not use end-to-end encryption can access, read, or change your messages, or even sell your private conversations to other parties. TextLight, with end-to-end encryption, guarantees that your messages can’t be sold because we don’t have access to your unencrypted messages in the first place. With end-to-end encrypted messaging, privacy isn’t just a promise; it’s mathematically ensured.\n\n
 
 
-\t It’s important to note that TextLight and end-to-end encryption cannot protect against all possible privacy threats. Parties such as TextLight and your internet service provider (Verizon, T-mobile, etc.) may be able to tell that you are exchanging messages with someone, even if they can’t see what the messages say. Moreover, end-to-end encryption cannot protect you from someone who gets their hands on your unlocked phone, or from a hacker who has successfully installed malicious software. TextLight also does not prevent your correspondent from publishing the messages you have exchanged.
+\t It’s important to note that TextLight and end-to-end encryption cannot protect against all possible privacy threats. Parties such as TextLight and your internet service provider (Verizon, AT&amp;T, etc.) may be able to tell that you are exchanging messages with someone, even if they can’t see what the messages say. Moreover, end-to-end encryption cannot protect you from someone who gets their hands on your unlocked phone, or from a hacker who has successfully installed malicious software. TextLight also does not prevent your correspondent from publishing the messages you have exchanged.
     </string>
 
 

@@ -63,6 +63,7 @@ import org.securityed.securesms.components.recyclerview.DeleteItemAnimator;
 import org.securityed.securesms.components.registration.PulsingFloatingActionButton;
 import org.securityed.securesms.components.reminder.DefaultSmsReminder;
 import org.securityed.securesms.components.reminder.DozeReminder;
+import org.securityed.securesms.components.reminder.E2EEReminder;
 import org.securityed.securesms.components.reminder.ExpiredBuildReminder;
 import org.securityed.securesms.components.reminder.OutdatedBuildReminder;
 import org.securityed.securesms.components.reminder.PushRegistrationReminder;
@@ -75,6 +76,8 @@ import org.securityed.securesms.components.reminder.UnauthorizedReminder;
 import org.securityed.securesms.database.DatabaseFactory;
 import org.securityed.securesms.database.MessagingDatabase.MarkedMessageInfo;
 import org.securityed.securesms.database.loaders.ConversationListLoader;
+import org.securityed.securesms.education.EducationalMessage;
+import org.securityed.securesms.education.EducationalMessageManager;
 import org.securityed.securesms.events.ReminderUpdateEvent;
 import org.securityed.securesms.jobs.ServiceOutageDetectionJob;
 import org.securityed.securesms.mediasend.MediaSendActivity;
@@ -240,8 +243,13 @@ public class ConversationListFragment extends Fragment
         //  return Optional.of(new ShareReminder(context));
         } else if (DozeReminder.isEligible(context)) {
           return Optional.of(new DozeReminder(context));
-        } else {
-          return Optional.absent();
+
+        } else if (EducationalMessageManager.isTimeForShortMessage(context, EducationalMessageManager.TOOL_TIP_MESSAGE)){
+          return Optional.of((new E2EEReminder(context)));
+
+        } else{
+
+            return Optional.absent();
         }
       }
 

@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 import android.view.View.OnClickListener;
 
 public abstract class Reminder {
-  private CharSequence title;
-  private CharSequence text;
+  protected CharSequence title;
+  protected CharSequence text;
 
   private OnClickListener okListener;
   private OnClickListener dismissListener;
@@ -16,6 +16,9 @@ public abstract class Reminder {
   {
     this.title = title;
     this.text  = text;
+  }
+
+  protected Reminder(){
   }
 
   public @Nullable CharSequence getTitle() {

@@ -7,6 +7,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -220,7 +225,7 @@ public class ConversationUpdateItem extends LinearLayout
   private void setEndSessionRecord(MessageRecord messageRecord) {
     icon.setImageResource(R.drawable.ic_refresh_white_24dp);
     icon.setColorFilter(new PorterDuffColorFilter(Color.parseColor("#757575"), PorterDuff.Mode.MULTIPLY));
-    body.setText(messageRecord.getDisplayBody(getContext()));
+    body.setText( messageRecord.getDisplayBody(getContext()));
 
     title.setVisibility(GONE);
     body.setVisibility(VISIBLE);
@@ -233,8 +238,9 @@ public class ConversationUpdateItem extends LinearLayout
     icon.setImageResource(R.drawable.ic_check_white_24dp);
 
     icon.setColorFilter(new PorterDuffColorFilter(Color.parseColor("#757575"), PorterDuff.Mode.MULTIPLY));
-    body.setText( messageRecord.getDisplayBody(getContext()));
-
+    CharSequence learnMore = (Html.fromHtml("<b> Tap here to learn more.</b>"));
+    CharSequence shortMessage = TextUtils.concat(messageRecord.getDisplayBody(getContext()), "\n", learnMore);
+    body.setText( shortMessage);
     title.setVisibility(GONE);
     body.setVisibility(VISIBLE);
     date.setVisibility(GONE);

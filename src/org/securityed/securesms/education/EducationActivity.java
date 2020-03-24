@@ -49,6 +49,19 @@ public class EducationActivity extends BaseActionBarActivity {
 
     }
 
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        Calendar exitTime = GregorianCalendar.getInstance();
+        EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry(
+                TextSecurePreferences.getLocalNumber(this), "splash-screen-exit",  EducationalMessageManager.OPENING_SCREEN_MESSAGE, em.getMessageName(), launchTime.getTime(), exitTime.getTimeInMillis()- launchTime.getTimeInMillis()));
+
+
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);

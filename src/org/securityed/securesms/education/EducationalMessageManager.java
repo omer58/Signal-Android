@@ -56,6 +56,8 @@ public class EducationalMessageManager {
     // Show message once per every OPENING_FREQUENCY.
     public static final int OPENING_FREQUENCY = 3;
 
+    public static final double SHOW_CHANCE = .5;
+
     private static String serverResponseCode = null;
 
 
@@ -82,19 +84,84 @@ public class EducationalMessageManager {
         case IN_CONVERSATION_MESSAGE:
             return isInConversationTurn(context);
         case TOOL_TIP_MESSAGE:
-            return true;
+            return isToolTipTurn(context);
         case OPENING_SCREEN_MESSAGE:
-            //TODO migrate this function to this class.
-            return hasNotSeenEducationalMessageInAWhile(context);
+            return false;//hasNotSeenEducationalMessageInAWhile(context);
         default:
             return false;
         }
 
     }
 
+    public static boolean isToolTipTurn( Context context) {
+
+
+        boolean wasConversationShownOnce = TextSecurePreferences.getWasConversationShownOnce(context);
+
+        boolean tooltipDismissed = TextSecurePreferences.getWasTooltipDismissed(context);
+        boolean tooltipShown = TextSecurePreferences.getWasTooltipShown(context);
+
+
+
+
+        if( tooltipDismissed && tooltipShown){
+            return false;
+        }
+
+        if( wasConversationShownOnce){
+            return false;
+        }
+
+
+        if( tooltipShown && !tooltipDismissed){
+            return true;
+        }
+
+
+
+        if( !TextSecurePreferences.isTooltipArmed(context) )
+            return false;
+
+
+        TextSecurePreferences.unarmTooltip(context);
+
+
+        if( Math.random() > 1-SHOW_CHANCE){
+
+            TextSecurePreferences.setWasTooltipDismissed(context, false);
+
+
+            return true;
+
+
+        }
+
+        return false;
+    }
+
 
     public static boolean isInConversationTurn( Context context){
 
+        boolean wasConversationShownOnce = TextSecurePreferences.getWasConversationShownOnce(context);
+        boolean tooltipShown = TextSecurePreferences.getWasTooltipShown(context);
+
+
+
+        // code to to make two versions appear at the same time.
+
+        if(!wasConversationShownOnce && Math.random() > 1-SHOW_CHANCE && !tooltipShown){
+
+            TextSecurePreferences.setWasConversationShownOnce(context, true);
+
+            return true;
+
+
+        }
+
+        return false;
+
+
+        /*
         if( TextSecurePreferences.getNumLaunches(context) % (OPENING_FREQUENCY * 2) == 0) {
             boolean wasConversationShownOnce = TextSecurePreferences.getWasConversationShownOnce(context);
 
@@ -105,11 +172,24 @@ public class EducationalMessageManager {
             }
         }
         return false;
+
+
+         */
     }
 
 
 
     public static boolean hasNotSeenEducationalMessageInAWhile( Context context){
+
+
+        if(Math.random() > 1-SHOW_CHANCE){
+            TextSecurePreferences.setWasConversationShownOnce(context, true);
+            return true;
+        }
+        TextSecurePreferences.setWasConversationShownOnce(context, false);
+        return false;
+
+        /*
 
         if( TextSecurePreferences.getNumLaunches(context) % OPENING_FREQUENCY != 0){
 
@@ -119,6 +199,9 @@ public class EducationalMessageManager {
         if(TextSecurePreferences.getNumLaunches(context) % OPENING_FREQUENCY == 0 && TextSecurePreferences.getNumLaunches(context) % (OPENING_FREQUENCY * 2) != 0)
             return true;
         return false;
+
+
+         */
     }
 
 
@@ -253,9 +336,25 @@ public class EducationalMessageManager {
 
     public static EducationalMessage getEducationalMessageFromBody( Context context, String body){
 
+        body = body.replace(" Tap here to learn more.", "");
+
         Log.d("EM search body", body);
         for( EducationalMessage em:shortMessages){
             if( body.equals(em.getMessageString(context))){
+                return em;
+            }
+        }
+
+        return null;
+    }
+
+
+    public static EducationalMessage getEducationalMessageFromName(String name){
+
+
+        for( EducationalMessage em:shortMessages){
+
+            if( name.equals((em.getMessageName()))){
                 return em;
             }
         }

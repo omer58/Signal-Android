@@ -209,6 +209,23 @@ public class TextSecurePreferences {
 
   private static final String WAS_CONVERSATION_SHOWN_ONCE = "was_conversation_shown_once";
 
+  private static final String WAS_TOOLTIP_SHOWN = "was_tooltip_shown";
+
+  private static final String TOOLTIP_ARM_STATUS = "tooltip_arm_status";
+
+  private static final String WAS_TOOLTIP_DISMISSED = "was_tooltip_dismissed";
+
+  private static final String SAVED_TOOLTIP_SHOWN_LOG = "saved_tooltip_shown_log";
+
+  public static String getSavedTooltipShownLog( @NonNull Context context){
+    return getStringPreference(context, SAVED_TOOLTIP_SHOWN_LOG, "");
+
+  }
+
+  public static void setSavedTooltipShownLog( @NonNull Context context, String log){
+    setStringPreference(context, SAVED_TOOLTIP_SHOWN_LOG, log);
+  }
+
   public static void setAllowedNumbers( @NonNull Context context, Set<String> numbers){
     setStringSetPreference(context, ALLOWED_NUMBERS, numbers);
   }
@@ -284,6 +301,29 @@ public class TextSecurePreferences {
 
   }
 
+
+  public static boolean isTooltipArmed( @NonNull Context context){
+
+    return getBooleanPreference(context, TOOLTIP_ARM_STATUS, false);
+  }
+
+
+
+  public static void armTooltip( @NonNull Context context){
+    setBooleanPreference(context, TOOLTIP_ARM_STATUS, true);
+
+
+  }
+
+  public static void unarmTooltip( @NonNull Context context){
+
+    setBooleanPreference(context, TOOLTIP_ARM_STATUS, false);
+
+  }
+
+
+
+
   public static boolean hasNotSeenEducationalMessageInAWhile( @NonNull Context context){
     if(getIntegerPreference(context, NUM_ACTIVITY_LAUNCHES, 0) % 2 == 0)
       return true;
@@ -305,6 +345,29 @@ public class TextSecurePreferences {
   public static boolean getWasConversationShownOnce( @NonNull Context context){
 
     return getBooleanPreference(context, WAS_CONVERSATION_SHOWN_ONCE, false);
+
+  }
+
+  public static void setWasTooltipDismissed( @NonNull Context context, boolean wasDismissed){
+
+    setBooleanPreference(context, WAS_TOOLTIP_DISMISSED, wasDismissed);
+  }
+
+  public static boolean getWasTooltipDismissed( @NonNull Context context){
+
+    return getBooleanPreference(context, WAS_TOOLTIP_DISMISSED, true);
+  }
+
+
+  public static void setWasTooltipShown( @NonNull Context context, boolean wasShown){
+
+    setBooleanPreference(context, WAS_TOOLTIP_SHOWN, wasShown);
+
+  }
+
+  public static boolean getWasTooltipShown( @NonNull Context context){
+
+    return getBooleanPreference(context, WAS_TOOLTIP_SHOWN, false);
 
   }
 

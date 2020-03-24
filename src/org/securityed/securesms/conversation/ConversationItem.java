@@ -415,6 +415,10 @@ public class ConversationItem extends LinearLayout implements BindableConversati
   private void setInteractionState(MessageRecord messageRecord, boolean pulseHighlight) {
     if (batchSelected.contains(messageRecord)) {
       setBackgroundResource(R.drawable.conversation_item_background);
+
+      if(messageRecord.isEducationalMessage()){
+        Log.d("display code", "it is an educational message");
+      }
       setSelected(true);
     } else if (pulseHighlight) {
       setBackgroundResource(R.drawable.conversation_item_background_animated);

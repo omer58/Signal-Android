@@ -22,6 +22,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 
 import org.securityed.securesms.R;
 import org.securityed.securesms.database.MmsSmsColumns;
@@ -104,7 +105,8 @@ public abstract class MessageRecord extends DisplayRecord {
     } else if (isMissedCall()) {
       return new SpannableString(context.getString(R.string.MessageRecord_missed_call));
     } else if (isEducationalMessage()){
-      return new SpannableString(context.getString(R.string.short_v1));
+
+      return new SpannableString(getBody());
     } else if (isJoined()) {
       return new SpannableString(context.getString(R.string.MessageRecord_s_joined_signal, getIndividualRecipient().toShortString()));
     } else if (isExpirationTimerUpdate()) {

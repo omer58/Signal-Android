@@ -159,6 +159,7 @@ public abstract class DisplayRecord {
     return readReceiptCount;
   }
 
+
   public boolean isDelivered() {
     return (deliveryStatus >= SmsDatabase.Status.STATUS_COMPLETE &&
             deliveryStatus < SmsDatabase.Status.STATUS_PENDING) || deliveryReceiptCount > 0;

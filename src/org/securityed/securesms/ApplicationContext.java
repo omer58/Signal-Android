@@ -142,25 +142,51 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
   @Override
   public void onStart(@NonNull LifecycleOwner owner) {
     isAppVisible = true;
-    Log.i(TAG, "App is now visible.");
-    TextSecurePreferences.incrementAppOpenTime(this);
 
     executePendingContactSync();
     KeyCachingService.onAppForegrounded(this);
 
+  }
+
+  @Override
+  public void onResume(LifecycleOwner owner){
+
+
+    Log.i(TAG, "App is now visible.");
+
+
+    TextSecurePreferences.incrementAppOpenTime(this);
     EducationalMessageManager.sendUnsentLogs(this);
   }
+
+
+  @Override
+  public void onPause(LifecycleOwner owner){
+
+    Log.i(TAG, "App is no longer visible.");
+
+
+
+  }
+
 
   @Override
   public void onStop(@NonNull LifecycleOwner owner) {
     isAppVisible = false;
-    Log.i(TAG, "App is no longer visible.");
     KeyCachingService.onAppBackgrounded(this);
     MessageNotifier.setVisibleThread(-1);
+
+
     if( EducationalMessageManager.isTimeForShortMessage(this, EducationalMessageManager.OPENING_SCREEN_MESSAGE)
             && !EducationalMessageManager.isEducationArmed(this) ){
       EducationalMessageManager.armEducation(this);
     }
+
+
+    TextSecurePreferences.setWasTooltipShown(this, false);
+    TextSecurePreferences.armTooltip(this);
+    TextSecurePreferences.setWasConversationShownOnce(this, false);
+
   }
 
   public JobManager getJobManager() {
