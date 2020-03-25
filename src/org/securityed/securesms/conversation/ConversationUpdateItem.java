@@ -145,7 +145,11 @@ public class ConversationUpdateItem extends LinearLayout
     if (batchSelected.contains(messageRecord)) setSelected(true);
     else                                       setSelected(false);
 
-    Log.d("conversation update item", "is called!!!!!!!!!!!");
+    if( messageRecord.isEducationalMessage()){
+      Log.d("conversation update item", "is called!!!!!!!!!!!");
+
+      TextSecurePreferences.incrementTimesSeen(getContext(), messageRecord.getTimestamp());
+    }
 
   }
 
@@ -286,7 +290,7 @@ public class ConversationUpdateItem extends LinearLayout
         Long now = GregorianCalendar.getInstance().getTimeInMillis();
         EducationalMessage em = EducationalMessageManager.getEducationalMessageFromBody(getContext(), messageRecord.getBody());
         EducationalMessageManager.notifyStatServer(getContext(), EducationalMessageManager.MESSAGE_SHOWN,
-                EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getContext()), "conversation_to_long", EducationalMessageManager.IN_CONVERSATION_MESSAGE, em.getMessageName(), new Date( messageRecord.getTimestamp()), now-sentDate));
+                EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getContext()), "conversation_to_long", EducationalMessageManager.IN_CONVERSATION_MESSAGE, em.getMessageName(), new Date( messageRecord.getTimestamp()), now-sentDate) + "_" + TextSecurePreferences.getTimesSeen(getContext(), messageRecord.getTimestamp()));
 
 
         Intent educationIntent = new Intent(getContext(), LongEducationalMessageActivity.class);

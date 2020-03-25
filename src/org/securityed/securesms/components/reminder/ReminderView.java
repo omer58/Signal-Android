@@ -57,6 +57,9 @@ public class ReminderView extends LinearLayout {
       title.setText("");
       title.setVisibility(GONE);
     }
+
+
+
     text.setText(reminder.getText());
     container.setBackgroundResource(reminder.getImportance() == Reminder.Importance.ERROR ? R.drawable.reminder_background_error
                                                                                           : R.drawable.reminder_background_normal);

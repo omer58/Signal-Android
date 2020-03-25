@@ -35,8 +35,15 @@ public class E2EEReminder extends Reminder {
             String log = TextSecurePreferences.getSavedTooltipShownLog(context);
 
             String name = log.split("_")[3];
+            Long prevMS = Long.parseLong(log.split( "_")[5]);
+            String prevDate = log.split("_")[4];
+
+            time = GregorianCalendar.getInstance();
+
 
             Log.d("message version", name);
+            Log.d("message init time", "time: " + prevMS);
+            Log.d("message init date", prevDate);
 
             EducationalMessage em = EducationalMessageManager.getEducationalMessageFromName(name);
 
@@ -49,13 +56,15 @@ public class E2EEReminder extends Reminder {
             final OnClickListener okListener = v -> {
 
                 // fix the time.
-
                 TextSecurePreferences.setWasTooltipDismissed(context, true);
 
-                //String okLog = EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(context),"conversationListLearnMore",
-                //        EducationalMessageManager.TOOL_TIP_MESSAGE, em.getMessageName(), ,   GregorianCalendar.getInstance().getTimeInMillis() - time.getTimeInMillis());
+                Long elapsedTimeSoFar = TextSecurePreferences.getTotalTooltipTime( context);
 
-                //EducationalMessageManager.notifyStatServer(context, EducationalMessageManager.MESSAGE_SHOWN, okLog);
+                String okLog = EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(context),"conversationListLearnMore",
+                        EducationalMessageManager.TOOL_TIP_MESSAGE, em.getMessageName(),  prevDate + "_" + prevMS,   GregorianCalendar.getInstance().getTimeInMillis() - time.getTimeInMillis() + elapsedTimeSoFar);
+
+                EducationalMessageManager.notifyStatServer(context, EducationalMessageManager.MESSAGE_SHOWN, okLog);
+
 
 
 
@@ -65,6 +74,14 @@ public class E2EEReminder extends Reminder {
 
 
             final OnClickListener dismissListener = v -> {
+
+                Long elapsedTimeSoFar = TextSecurePreferences.getTotalTooltipTime( context);
+
+                String dismissLog = EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(context),"conversationListDismissed",
+                        EducationalMessageManager.TOOL_TIP_MESSAGE, em.getMessageName(),  prevDate + "_" + prevMS,   GregorianCalendar.getInstance().getTimeInMillis() - time.getTimeInMillis() + elapsedTimeSoFar);
+
+                EducationalMessageManager.notifyStatServer(context, EducationalMessageManager.MESSAGE_SHOWN, dismissLog);
+
 
                 TextSecurePreferences.setWasTooltipDismissed(context, true);
 
@@ -76,6 +93,7 @@ public class E2EEReminder extends Reminder {
         } else {
 
             TextSecurePreferences.setWasTooltipShown(context, true);
+            TextSecurePreferences.resetTotalTooltipTime(context);
 
 
             EducationalMessage em = EducationalMessageManager.getShortMessage(context);

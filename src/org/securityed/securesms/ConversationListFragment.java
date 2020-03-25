@@ -121,7 +121,7 @@ public class ConversationListFragment extends Fragment
   private PulsingFloatingActionButton fab;
   private PulsingFloatingActionButton cameraFab;
   private Locale                      locale;
-  private String                      queryFilter  = "";
+  private String                      queryFilter = "";
   private boolean                     archive;
 
   @Override

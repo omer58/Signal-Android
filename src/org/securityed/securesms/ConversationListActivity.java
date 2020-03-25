@@ -91,6 +91,8 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
   private ImageView                searchAction;
   private ViewGroup                fragmentContainer;
 
+  private Calendar launchTime;
+
   @Override
   protected void onPreCreate() {
     dynamicTheme.onCreate(this);
@@ -116,8 +118,6 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     RegistrationLockDialog.showReminderIfNecessary(this);
 
     //TooltipCompat.setTooltipText(searchAction, getText(R.string.SearchToolbar_search_for_conversations_contacts_and_messages));
-
-
 
     Context c = this;
 
@@ -188,6 +188,27 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     dynamicLanguage.onResume(this);
 
     SimpleTask.run(getLifecycle(), Recipient::self, this::initializeProfileIcon);
+
+    launchTime = GregorianCalendar.getInstance();
+
+  }
+
+  @Override
+  public void onPause(){
+    super.onPause();
+
+    Long timeElapsed = GregorianCalendar.getInstance().getTimeInMillis() - launchTime.getTimeInMillis();
+
+    if( TextSecurePreferences.getWasTooltipShown(this) && !TextSecurePreferences.getWasTooltipDismissed(this)){
+
+      //save timeElapsed
+
+      Log.d("additional time spent", "t:" + timeElapsed);
+
+      TextSecurePreferences.addToTotalTooltipTime(this, timeElapsed);
+    }
+
+
   }
 
   @Override

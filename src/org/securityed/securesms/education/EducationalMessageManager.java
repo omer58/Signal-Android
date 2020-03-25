@@ -207,11 +207,15 @@ public class EducationalMessageManager {
 
 
     private static String formatDateString( Date date){
-        return date.toString().replace(" ", "_").replace(":", "-") + "_" + date.getTime();
+        return date.toString().replace(" ", "-").replace(":", "-") + "_" + date.getTime();
     }
 
     public static String getMessageShownLogEntry( String phoneNumber, String screen, int messageType, String version, Date date, long timeElapsed){
         return phoneNumber + "_" + screen + "_" + messageType + "_" + version + "_" + formatDateString(date) + "_" + timeElapsed;
+    }
+
+    public static String getMessageShownLogEntry( String phoneNumber, String screen, int messageType, String version, String date, long timeElapsed){
+        return phoneNumber + "_" + screen + "_" + messageType + "_" + version + "_" + date + "_" + timeElapsed;
     }
 
     public static String getMessageExchangeLogEntry(String phoneNumber, Boolean sent, String messageType, Date date){

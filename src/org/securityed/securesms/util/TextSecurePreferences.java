@@ -217,6 +217,29 @@ public class TextSecurePreferences {
 
   private static final String SAVED_TOOLTIP_SHOWN_LOG = "saved_tooltip_shown_log";
 
+  private static final String TOTAL_TOOLTIP_TIME = "total_tooltip_time";
+
+  private static final String TIMESTAMP_KEY = "timestamp_key_";
+
+
+  public static void resetTotalTooltipTime(@NonNull Context context){
+    setLongPreference(context, TOTAL_TOOLTIP_TIME, 0);
+  }
+
+
+  public static void addToTotalTooltipTime( @NonNull Context context, Long elapsedTime){
+    Long totalTime = getLongPreference(context, TOTAL_TOOLTIP_TIME, 0);
+    setLongPreference( context, TOTAL_TOOLTIP_TIME, totalTime + elapsedTime);
+  }
+
+  public static Long getTotalTooltipTime(@NonNull Context context){
+    return getLongPreference(context, TOTAL_TOOLTIP_TIME, 0);
+  }
+
+
+
+
+
   public static String getSavedTooltipShownLog( @NonNull Context context){
     return getStringPreference(context, SAVED_TOOLTIP_SHOWN_LOG, "");
 
@@ -1379,9 +1402,7 @@ public class TextSecurePreferences {
 
 
   private static void setStringSetPreference( Context context, String key, Set<String> strings){
-
     PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(key, strings).apply();
-
   }
 
   private static Set<String> getStringSetPreference(Context context, String key, Set<String> defaultValues) {
@@ -1392,6 +1413,26 @@ public class TextSecurePreferences {
       return defaultValues;
     }
   }
+
+  // this key is the hashmap key.
+  public static void incrementTimesSeen( Context context, Long timeStamp){
+
+    String messageKey = TIMESTAMP_KEY + timeStamp;
+
+    int currentOpens = getIntegerPreference(context, messageKey, 0);
+
+
+    setIntegerPrefrence(context, messageKey, currentOpens + 1);
+
+  }
+
+  public static int getTimesSeen( Context context, Long timeStamp){
+    String messageKey = TIMESTAMP_KEY + timeStamp;
+
+    return getIntegerPreference(context, messageKey, 0);
+  }
+
+
 
   // NEVER rename these -- they're persisted by name
   public enum MediaKeyboardMode {

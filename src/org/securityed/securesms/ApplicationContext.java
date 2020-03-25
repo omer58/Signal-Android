@@ -72,6 +72,7 @@ import org.securityed.securesms.service.RotateSignedPreKeyListener;
 import org.securityed.securesms.service.UpdateApkRefreshListener;
 import org.securityed.securesms.util.TextSecurePreferences;
 import org.securityed.securesms.util.dynamiclanguage.DynamicLanguageContextWrapper;
+import org.w3c.dom.Text;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.PeerConnectionFactory.InitializationOptions;
 import org.webrtc.voiceengine.WebRtcAudioManager;
@@ -183,9 +184,19 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
     }
 
 
-    TextSecurePreferences.setWasTooltipShown(this, false);
-    TextSecurePreferences.armTooltip(this);
-    TextSecurePreferences.setWasConversationShownOnce(this, false);
+    if( TextSecurePreferences.getWasTooltipShown(this) && !TextSecurePreferences.getWasTooltipDismissed(this)){
+
+      //this means that the tooltip was still not dismissed so we don't want to reset anything.
+
+    }else{
+
+      TextSecurePreferences.setWasTooltipShown(this, false);
+      TextSecurePreferences.armTooltip(this);
+      TextSecurePreferences.setWasConversationShownOnce(this, false);
+
+    }
+
+
 
   }
 
