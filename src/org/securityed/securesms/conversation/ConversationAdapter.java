@@ -208,6 +208,22 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
                               searchQuery,
                               messageRecord == recordToPulseHighlight);
 
+
+    /*
+    if(messageRecord.isEducationalMessage()){
+
+      int[] location = new int[2];
+      viewHolder.getView().getLocationOnScreen(location);
+
+      Log.d("conversation adapter", "educational message shown!");
+      Log.d("conversation adapter", "isShown() " + viewHolder.getView().isShown());
+      Log.d("conversation adapter", "getLocation() " + location[0] + " " + location[1]);
+
+
+
+    }
+    */
+
     if (messageRecord == recordToPulseHighlight) {
       recordToPulseHighlight = null;
     }

@@ -3,6 +3,7 @@ package org.securityed.securesms.components.reminder;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build.VERSION_CODES;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -59,8 +60,17 @@ public class ReminderView extends LinearLayout {
     }
 
 
+    if( reminder instanceof  E2EEReminder){
 
-    text.setText(reminder.getText());
+      CharSequence learnMore = (Html.fromHtml("<b> Tap here to learn more.</b>"));
+      CharSequence shortMessage = TextUtils.concat(reminder.getText(), " ", learnMore);
+      text.setText( shortMessage);
+
+
+    } else {
+      text.setText(reminder.getText());
+    }
+
     container.setBackgroundResource(reminder.getImportance() == Reminder.Importance.ERROR ? R.drawable.reminder_background_error
                                                                                           : R.drawable.reminder_background_normal);
 

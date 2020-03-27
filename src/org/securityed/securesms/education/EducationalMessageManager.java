@@ -23,6 +23,7 @@ import org.w3c.dom.Text;
 
 import java.net.ConnectException;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +57,9 @@ public class EducationalMessageManager {
     // Show message once per every OPENING_FREQUENCY.
     public static final int OPENING_FREQUENCY = 3;
 
-    public static final double SHOW_CHANCE = .5;
+    public static final double SHOW_CHANCE_IN_CONVO = .10;
+
+    public static final double SHOW_CHANCE_CONVO_LIST = .2;
 
     private static String serverResponseCode = null;
 
@@ -126,7 +129,7 @@ public class EducationalMessageManager {
         TextSecurePreferences.unarmTooltip(context);
 
 
-        if( Math.random() > 1-SHOW_CHANCE){
+        if( Math.random() > 1-SHOW_CHANCE_CONVO_LIST){
 
             TextSecurePreferences.setWasTooltipDismissed(context, false);
 
@@ -149,7 +152,7 @@ public class EducationalMessageManager {
 
         // code to to make two versions appear at the same time.
 
-        if(!wasConversationShownOnce && Math.random() > 1-SHOW_CHANCE && !tooltipShown){
+        if(!wasConversationShownOnce && Math.random() > 1-SHOW_CHANCE_IN_CONVO && !tooltipShown){
 
             TextSecurePreferences.setWasConversationShownOnce(context, true);
 
@@ -182,7 +185,7 @@ public class EducationalMessageManager {
     public static boolean hasNotSeenEducationalMessageInAWhile( Context context){
 
 
-        if(Math.random() > 1-SHOW_CHANCE){
+        if(Math.random() > 1-SHOW_CHANCE_CONVO_LIST){
             TextSecurePreferences.setWasConversationShownOnce(context, true);
             return true;
         }
@@ -404,6 +407,8 @@ public class EducationalMessageManager {
                     notifyStatServerProper(context, log);
                     SystemClock.sleep(200);
                 }
+
+                notifyStatServer(context, MESSAGE_EXCHANGE, getMessageExchangeLogEntry( TextSecurePreferences.getLocalNumber(context), false, "app-open", GregorianCalendar.getInstance().getTime()));
 
                 return null;
             }

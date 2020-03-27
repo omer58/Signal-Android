@@ -80,6 +80,35 @@ public class ConversationUpdateItem extends LinearLayout
     this.date  = findViewById(R.id.conversation_update_date);
 
     this.setOnClickListener(new InternalClickListener(null));
+
+
+
+
+  }
+
+  @Override
+  protected void onVisibilityChanged (View changedView, int visibility){
+
+
+
+    if( messageRecord != null && messageRecord.isEducationalMessage() && visibility == View.VISIBLE){
+
+      Log.d("visiblility changed", "new vis: " + visibility);
+      Log.d("heyoo", "!!!!!!!!!!!!!!!!!!!!!!");
+      TextSecurePreferences.incrementTimesSeen(getContext(), messageRecord.getTimestamp());
+
+      //EducationalMessageManager.notifyStatServer( );
+
+      Long sentDate = messageRecord.getTimestamp();
+      Long now = GregorianCalendar.getInstance().getTimeInMillis();
+      EducationalMessage em = EducationalMessageManager.getEducationalMessageFromBody(getContext(), messageRecord.getBody());
+      EducationalMessageManager.notifyStatServer(getContext(), EducationalMessageManager.MESSAGE_SHOWN,
+              EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getContext()), "conversation_seen", EducationalMessageManager.IN_CONVERSATION_MESSAGE, em.getMessageName(), new Date( messageRecord.getTimestamp()), now-sentDate) + "_" + TextSecurePreferences.getTimesSeen(getContext(), messageRecord.getTimestamp()));
+
+
+
+    }
+
   }
 
   @Override
@@ -144,12 +173,6 @@ public class ConversationUpdateItem extends LinearLayout
 
     if (batchSelected.contains(messageRecord)) setSelected(true);
     else                                       setSelected(false);
-
-    if( messageRecord.isEducationalMessage()){
-      Log.d("conversation update item", "is called!!!!!!!!!!!");
-
-      TextSecurePreferences.incrementTimesSeen(getContext(), messageRecord.getTimestamp());
-    }
 
   }
 
