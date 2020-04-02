@@ -103,7 +103,7 @@ public class ConversationUpdateItem extends LinearLayout
       Long now = GregorianCalendar.getInstance().getTimeInMillis();
       EducationalMessage em = EducationalMessageManager.getEducationalMessageFromBody(getContext(), messageRecord.getBody());
       EducationalMessageManager.notifyStatServer(getContext(), EducationalMessageManager.MESSAGE_SHOWN,
-              EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getContext()), "conversation_seen", EducationalMessageManager.IN_CONVERSATION_MESSAGE, em.getMessageName(), new Date( messageRecord.getTimestamp()), now-sentDate) + "_" + TextSecurePreferences.getTimesSeen(getContext(), messageRecord.getTimestamp()));
+              EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getContext()), "conversation-seen", EducationalMessageManager.IN_CONVERSATION_MESSAGE, em.getMessageName(), new Date( messageRecord.getTimestamp()), now-sentDate) + "_" + TextSecurePreferences.getTimesSeen(getContext(), messageRecord.getTimestamp()));
 
 
 
