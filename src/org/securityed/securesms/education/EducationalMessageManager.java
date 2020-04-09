@@ -59,7 +59,7 @@ public class EducationalMessageManager {
 
     public static final double SHOW_CHANCE_IN_CONVO = .10;
 
-    public static final double SHOW_CHANCE_CONVO_LIST = .2;
+    public static final double SHOW_CHANCE_CONVO_LIST = .4;
 
     private static String serverResponseCode = null;
 
