@@ -221,6 +221,17 @@ public class TextSecurePreferences {
 
   private static final String TIMESTAMP_KEY = "timestamp_key_";
 
+  private static final String LAST_MESSAGE_SHOWN_TIME = "last_message_shown_time";
+
+
+  public static void setLastMessageShownTime( @NonNull Context context, long timeStamp){
+    setLongPreference(context, LAST_MESSAGE_SHOWN_TIME, timeStamp);
+  }
+
+  public static long getLastMessageShownTime( @NonNull Context context){
+    return getLongPreference(context, LAST_MESSAGE_SHOWN_TIME, 0);
+  }
+
 
   public static void resetTotalTooltipTime(@NonNull Context context){
     setLongPreference(context, TOTAL_TOOLTIP_TIME, 0);

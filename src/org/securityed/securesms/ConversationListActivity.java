@@ -71,6 +71,7 @@ import org.securityed.securesms.education.*;
 import org.whispersystems.libsignal.util.guava.Optional;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -206,6 +207,27 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
       Log.d("additional time spent", "t:" + timeElapsed);
 
       TextSecurePreferences.addToTotalTooltipTime(this, timeElapsed);
+
+
+      String log = TextSecurePreferences.getSavedTooltipShownLog(getApplicationContext());
+
+      String name = log.split("_")[3];
+      Long prevMS = Long.parseLong(log.split( "_")[5]);
+      String prevDate = log.split("_")[4];
+
+
+      Log.d("message version", name);
+      Log.d("message init time", "time: " + prevMS);
+      Log.d("message init date", prevDate);
+
+      EducationalMessage em = EducationalMessageManager.getEducationalMessageFromName(name);
+
+
+      Long now = GregorianCalendar.getInstance().getTimeInMillis();
+      EducationalMessageManager.notifyStatServer(getApplicationContext(), EducationalMessageManager.MESSAGE_SHOWN,
+              EducationalMessageManager.getMessageShownLogEntry(TextSecurePreferences.getLocalNumber(getApplicationContext()), "conversationList-seen", EducationalMessageManager.TOOL_TIP_MESSAGE, em.getMessageName(), new Date( prevMS), now-prevMS) + "_" + timeElapsed);
+
+
     }
 
 

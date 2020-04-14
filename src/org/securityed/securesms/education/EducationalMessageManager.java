@@ -57,9 +57,16 @@ public class EducationalMessageManager {
     // Show message once per every OPENING_FREQUENCY.
     public static final int OPENING_FREQUENCY = 3;
 
-    public static final double SHOW_CHANCE_IN_CONVO = .10;
+    public static final double SHOW_CHANCE_IN_CONVO = .00;
 
-    public static final double SHOW_CHANCE_CONVO_LIST = .4;
+    public static final double SHOW_CHANCE_CONVO_LIST = .10;
+
+
+    public static final long DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+    public static final long MAX_TIME_BEFORE_NEW_MESSAGE = DAY_IN_MS * 2 / 96;
+
+    public static final long MAX_DISPLAY_TIME_TOOLTIP = DAY_IN_MS * 3 / 24 / 3 / 15;
 
     private static String serverResponseCode = null;
 
@@ -96,6 +103,8 @@ public class EducationalMessageManager {
 
     }
 
+
+
     public static boolean isToolTipTurn( Context context) {
 
 
@@ -129,6 +138,20 @@ public class EducationalMessageManager {
         TextSecurePreferences.unarmTooltip(context);
 
 
+        // if it's been two days shoot one.
+
+        long lastMessageTimeStamp = TextSecurePreferences.getLastMessageShownTime(context);
+        long currentTime = GregorianCalendar.getInstance().getTimeInMillis();
+
+        if ( currentTime - lastMessageTimeStamp > MAX_TIME_BEFORE_NEW_MESSAGE){
+
+            TextSecurePreferences.setWasTooltipDismissed(context, false);
+
+            return true;
+
+        }
+
+
         if( Math.random() > 1-SHOW_CHANCE_CONVO_LIST){
 
             TextSecurePreferences.setWasTooltipDismissed(context, false);
@@ -147,18 +170,30 @@ public class EducationalMessageManager {
 
         boolean wasConversationShownOnce = TextSecurePreferences.getWasConversationShownOnce(context);
         boolean tooltipShown = TextSecurePreferences.getWasTooltipShown(context);
+        long lastMessageTimeStamp = TextSecurePreferences.getLastMessageShownTime(context);
 
 
 
         // code to to make two versions appear at the same time.
 
-        if(!wasConversationShownOnce && Math.random() > 1-SHOW_CHANCE_IN_CONVO && !tooltipShown){
+        // if it's been two days shoot one.
+
+        long currentTime = GregorianCalendar.getInstance().getTimeInMillis();
+
+        if ( currentTime - lastMessageTimeStamp > MAX_TIME_BEFORE_NEW_MESSAGE){
 
             TextSecurePreferences.setWasConversationShownOnce(context, true);
 
             return true;
 
+        }
 
+        // maintain the probability that we show a message if it hasn't been to long since we saw the last one.
+        if(!wasConversationShownOnce && Math.random() > 1-SHOW_CHANCE_IN_CONVO && !tooltipShown){
+
+            TextSecurePreferences.setWasConversationShownOnce(context, true);
+
+            return true;
         }
 
         return false;
@@ -259,7 +294,7 @@ public class EducationalMessageManager {
 
     }
 
-    public static void notifyStatServer(Context context, String logType, String log){
+    public static void  notifyStatServer(Context context, String logType, String log){
         String args = logType + "=" + log;
         notifyStatServerProper(context, args);
     }

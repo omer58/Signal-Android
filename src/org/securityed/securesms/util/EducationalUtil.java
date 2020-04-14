@@ -75,6 +75,9 @@ public class EducationalUtil {
         EducationalMessageManager.notifyStatServer(context, EducationalMessageManager.MESSAGE_SHOWN, EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(context), "inConversation", EducationalMessageManager.IN_CONVERSATION_MESSAGE,
                 em.getMessageName(), c.getTime(), -1));
 
+        TextSecurePreferences.setLastMessageShownTime( context, c.getTime().getTime());
+
+
         /*
 
         // this loop deals with groups the the recipient is in... I think

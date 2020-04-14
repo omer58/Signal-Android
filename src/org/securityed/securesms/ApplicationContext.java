@@ -32,6 +32,7 @@ import androidx.multidex.MultiDexApplication;
 import com.google.android.gms.security.ProviderInstaller;
 
 import org.conscrypt.Conscrypt;
+import org.securityed.securesms.education.EducationalMessage;
 import org.signal.aesgcmprovider.AesGcmProvider;
 import org.securityed.securesms.components.TypingStatusRepository;
 import org.securityed.securesms.components.TypingStatusSender;
@@ -80,6 +81,7 @@ import org.webrtc.voiceengine.WebRtcAudioUtils;
 import org.whispersystems.libsignal.logging.SignalProtocolLoggerProvider;
 
 import java.security.Security;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -178,6 +180,8 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
     MessageNotifier.setVisibleThread(-1);
 
 
+    //state control
+
     if( EducationalMessageManager.isTimeForShortMessage(this, EducationalMessageManager.OPENING_SCREEN_MESSAGE)
             && !EducationalMessageManager.isEducationArmed(this) ){
       EducationalMessageManager.armEducation(this);
@@ -188,14 +192,47 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
 
       //this means that the tooltip was still not dismissed so we don't want to reset anything.
 
+      //unless it's been too long then we'll dismiss it for them.
+
+      //TODO
+
+
+      String log = TextSecurePreferences.getSavedTooltipShownLog(this);
+
+      String name = log.split("_")[3];
+      Long prevMS = Long.parseLong(log.split( "_")[5]);
+      String prevDate = log.split("_")[4];
+
+      Long currentTime = GregorianCalendar.getInstance().getTimeInMillis();
+
+      EducationalMessage em = EducationalMessageManager.getEducationalMessageFromName(name);
+
+
+      if( currentTime - prevMS > EducationalMessageManager.MAX_DISPLAY_TIME_TOOLTIP){
+
+        Long elapsedTimeSoFar = TextSecurePreferences.getTotalTooltipTime( this);
+
+        String dismissLog = EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(this),"conversationListAutoDismissed",
+                EducationalMessageManager.TOOL_TIP_MESSAGE, em.getMessageName(),  prevDate + "_" + prevMS, elapsedTimeSoFar);
+
+        EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_SHOWN, dismissLog);
+
+
+        TextSecurePreferences.setWasTooltipDismissed(this, true);
+        TextSecurePreferences.setWasTooltipShown(this, false);
+        TextSecurePreferences.armTooltip(this);
+
+      }
+
+
     }else{
 
       TextSecurePreferences.setWasTooltipShown(this, false);
       TextSecurePreferences.armTooltip(this);
-      TextSecurePreferences.setWasConversationShownOnce(this, false);
 
     }
 
+    TextSecurePreferences.setWasConversationShownOnce(this, false);
 
 
   }

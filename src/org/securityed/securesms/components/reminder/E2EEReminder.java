@@ -113,6 +113,9 @@ public class E2EEReminder extends Reminder {
 
             TextSecurePreferences.setSavedTooltipShownLog( context, log);
 
+            TextSecurePreferences.setLastMessageShownTime( context, time.getTimeInMillis());
+
+
 
 
             final OnClickListener okListener = v -> {
