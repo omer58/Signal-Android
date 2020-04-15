@@ -230,6 +230,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -332,6 +333,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   private final IdentityRecordList      identityRecords = new IdentityRecordList();
   private final DynamicNoActionBarTheme dynamicTheme    = new DynamicNoActionBarTheme();
   private final DynamicLanguage         dynamicLanguage = new DynamicLanguage();
+
+  private long launchTime;
 
   @Override
   protected void onPreCreate() {
@@ -509,6 +512,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     markThreadAsRead();
 
     Log.i(TAG, "onResume() Finished: " + (System.currentTimeMillis() - getIntent().getLongExtra(TIMING_EXTRA, 0)));
+
+    launchTime = GregorianCalendar.getInstance().getTimeInMillis();
   }
 
   @Override
@@ -522,6 +527,9 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     markLastSeen();
     AudioSlidePlayer.stopAll();
     EventBus.getDefault().unregister(this);
+
+    long timeElapsed = GregorianCalendar.getInstance().getTimeInMillis() - launchTime;
+    ApplicationContext.getInstance(getApplicationContext()).addToConversationTimeElapsed(timeElapsed);
   }
 
   @Override

@@ -286,6 +286,8 @@ public class EducationalMessageManager {
 
                 Log.e( "the url", url);
 
+
+
                 TextSecurePreferences.addToUnsentLogs(context, args);
             }
         });
@@ -442,8 +444,6 @@ public class EducationalMessageManager {
                     notifyStatServerProper(context, log);
                     SystemClock.sleep(200);
                 }
-
-                notifyStatServer(context, MESSAGE_EXCHANGE, getMessageExchangeLogEntry( TextSecurePreferences.getLocalNumber(context), false, "app-open", GregorianCalendar.getInstance().getTime()));
 
                 return null;
             }

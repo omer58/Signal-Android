@@ -223,6 +223,8 @@ public class TextSecurePreferences {
 
   private static final String LAST_MESSAGE_SHOWN_TIME = "last_message_shown_time";
 
+  public static final Object PREFERENCE_LOCK = new Object();
+
 
   public static void setLastMessageShownTime( @NonNull Context context, long timeStamp){
     setLongPreference(context, LAST_MESSAGE_SHOWN_TIME, timeStamp);

@@ -155,7 +155,11 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
     TextSecurePreferences.incrementAppOpenTime(this);
     EducationalMessageManager.sendUnsentLogs(this);
 
-    applicationTimeTracker = new ApplicationTimeTracker();
+    applicationTimeTracker = new ApplicationTimeTracker(); // sets open date automatically.
+    EducationalMessageManager.notifyStatServer(this,
+            EducationalMessageManager.MESSAGE_EXCHANGE,
+            EducationalMessageManager.getMessageExchangeLogEntry( TextSecurePreferences.getLocalNumber(this), false, "app-open", applicationTimeTracker.getOpenDate()));
+
 
   }
 
@@ -194,10 +198,6 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
       //this means that the tooltip was still not dismissed so we don't want to reset anything.
 
       //unless it's been too long then we'll dismiss it for them.
-
-      //TODO
-
-
       String log = TextSecurePreferences.getSavedTooltipShownLog(this);
 
       String name = log.split("_")[3];
@@ -235,6 +235,13 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
 
     TextSecurePreferences.setWasConversationShownOnce(this, false);
 
+
+    applicationTimeTracker.setCloseDate(GregorianCalendar.getInstance().getTime());
+
+    String screenTimeLog = applicationTimeTracker.getScreenTimeLog();
+
+    EducationalMessageManager.notifyStatServer(this, EducationalMessageManager.MESSAGE_EXCHANGE,
+            EducationalMessageManager.getMessageExchangeLogEntry( TextSecurePreferences.getLocalNumber(this), false, "app-close", applicationTimeTracker.getOpenDate()) + screenTimeLog);
 
 
 

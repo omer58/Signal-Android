@@ -18,6 +18,7 @@ package org.securityed.securesms;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -122,61 +123,6 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
 
     Context c = this;
 
-    try{
-      new AsyncTask<Recipient, Void, Void>() {
-        @Override
-        protected Void doInBackground(Recipient... params) {
-          SystemClock.sleep(1000);
-          synchronized (SESSION_LOCK) {
-            if(EducationalMessageManager.isTimeForShortMessage(c, EducationalMessageManager.TOOL_TIP_MESSAGE)){
-
-              Calendar time = GregorianCalendar.getInstance();
-              EducationalMessage educationalMessage = EducationalMessageManager.getShortMessage(c);
-
-              final Address localAddress = Address.fromSerialized(TextSecurePreferences.getLocalNumber(c));
-              localAddress.toPhoneString();
-
-              Log.d("ConversationList", "tooltip init.");
-
-              TooltipPopup.Builder ttpb = TooltipPopup.forTarget(searchToolbar)
-                      .setBackgroundTint(getResources().getColor(R.color.core_blue))
-                      .setTextColor(getResources().getColor(R.color.core_white))
-                      .setText( R.string.dummy)// educationalMessage.getStringID())
-                      .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                  long timePassedInMs = GregorianCalendar.getInstance().getTimeInMillis()-time.getTimeInMillis();
-
-                  EducationalMessageManager.notifyStatServer(c, EducationalMessageManager.MESSAGE_SHOWN,
-                          EducationalMessageManager.getMessageShownLogEntry( TextSecurePreferences.getLocalNumber(c),"conversationList",
-                                  EducationalMessageManager.TOOL_TIP_MESSAGE, educationalMessage.getMessageName(), time.getTime(), timePassedInMs ));
-
-                }
-              });
-
-              runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  TooltipPopup tooltip = ttpb.show(TooltipPopup.POSITION_MIDDLE);
-                  Log.d("after show: ", "" + tooltip.getContentView().getWidth());
-
-                }
-              });
-
-
-            }
-          }
-          return null;
-        }
-      };//.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); this disables the blue tooltip.
-
-
-    } catch ( RuntimeException e){
-
-      Log.d("exception", "couldn't send tooltip");
-
-    }
-
 
 
 
@@ -199,6 +145,9 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     super.onPause();
 
     Long timeElapsed = GregorianCalendar.getInstance().getTimeInMillis() - launchTime.getTimeInMillis();
+
+    ApplicationContext appContext = ApplicationContext.getInstance( getApplicationContext());
+    appContext.addToConversationListTimeElapsed( timeElapsed);
 
     if( TextSecurePreferences.getWasTooltipShown(this) && !TextSecurePreferences.getWasTooltipDismissed(this)){
 
