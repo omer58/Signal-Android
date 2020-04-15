@@ -106,6 +106,9 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
   private IncomingMessageObserver  incomingMessageObserver;
   private PersistentLogger         persistentLogger;
 
+
+  private ApplicationTimeTracker   applicationTimeTracker;
+
   private volatile boolean isAppVisible;
 
   public static ApplicationContext getInstance(Context context) {
@@ -149,27 +152,25 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
     executePendingContactSync();
     KeyCachingService.onAppForegrounded(this);
 
+    TextSecurePreferences.incrementAppOpenTime(this);
+    EducationalMessageManager.sendUnsentLogs(this);
+
+    applicationTimeTracker = new ApplicationTimeTracker();
+
   }
 
   @Override
   public void onResume(LifecycleOwner owner){
-
-
     Log.i(TAG, "App is now visible.");
-
-
-    TextSecurePreferences.incrementAppOpenTime(this);
-    EducationalMessageManager.sendUnsentLogs(this);
   }
+
+
 
 
   @Override
   public void onPause(LifecycleOwner owner){
 
     Log.i(TAG, "App is no longer visible.");
-
-
-
   }
 
 
@@ -235,6 +236,10 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
     TextSecurePreferences.setWasConversationShownOnce(this, false);
 
 
+
+
+
+
   }
 
   public JobManager getJobManager() {
@@ -263,6 +268,16 @@ public class ApplicationContext extends MultiDexApplication implements DefaultLi
 
   public PersistentLogger getPersistentLogger() {
     return persistentLogger;
+  }
+
+  public void addToConversationListTimeElapsed(long timeElapsed){
+
+    applicationTimeTracker.addToConversationListTimeElapsed( timeElapsed);
+  }
+
+  public void addToConversationTimeElapsed(long timeElapsed){
+
+    applicationTimeTracker.addToConversationTimeElapsed(timeElapsed);
   }
 
   private void initializeSecurityProvider() {
