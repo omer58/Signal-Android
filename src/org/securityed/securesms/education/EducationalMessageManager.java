@@ -57,16 +57,18 @@ public class EducationalMessageManager {
     // Show message once per every OPENING_FREQUENCY.
     public static final int OPENING_FREQUENCY = 3;
 
-    public static final double SHOW_CHANCE_IN_CONVO = .00;
+    public static final double SHOW_CHANCE_IN_CONVO = .30;
 
-    public static final double SHOW_CHANCE_CONVO_LIST = .10;
+    public static final double SHOW_CHANCE_CONVO_LIST = .30;
 
 
     public static final long DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-    public static final long MAX_TIME_BEFORE_NEW_MESSAGE = DAY_IN_MS * 2 / 96;
+    public static final long MAX_TIME_BEFORE_NEW_MESSAGE = (long)(DAY_IN_MS * 1.9);
 
-    public static final long MAX_DISPLAY_TIME_TOOLTIP = DAY_IN_MS * 3 / 24 / 3 / 15;
+    public static final long MAX_DISPLAY_TIME_TOOLTIP = DAY_IN_MS / 3;
+
+    public static final long MIN_TIME_BETWEEN_MESSAGES = (long)(DAY_IN_MS / 6);
 
     private static String serverResponseCode = null;
 
@@ -143,7 +145,10 @@ public class EducationalMessageManager {
         long lastMessageTimeStamp = TextSecurePreferences.getLastMessageShownTime(context);
         long currentTime = GregorianCalendar.getInstance().getTimeInMillis();
 
-        if ( currentTime - lastMessageTimeStamp > MAX_TIME_BEFORE_NEW_MESSAGE){
+        if ( currentTime - lastMessageTimeStamp < MIN_TIME_BETWEEN_MESSAGES){
+            return false;
+
+        } else if ( currentTime - lastMessageTimeStamp > MAX_TIME_BEFORE_NEW_MESSAGE){
 
             TextSecurePreferences.setWasTooltipDismissed(context, false);
 
@@ -186,6 +191,9 @@ public class EducationalMessageManager {
 
             return true;
 
+        } else if ( currentTime - lastMessageTimeStamp < MIN_TIME_BETWEEN_MESSAGES){
+
+            return false;
         }
 
         // maintain the probability that we show a message if it hasn't been to long since we saw the last one.
