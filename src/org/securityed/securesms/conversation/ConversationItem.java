@@ -817,7 +817,7 @@ public class ConversationItem extends LinearLayout implements BindableConversati
   }
 
   private SpannableString linkifyMessageBody(SpannableString messageBody, boolean shouldLinkifyAllLinks) {
-    int     linkPattern = Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES | Linkify.PHONE_NUMBERS;
+    int     linkPattern = Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES; //| Linkify.PHONE_NUMBERS
     boolean hasLinks    = Linkify.addLinks(messageBody, shouldLinkifyAllLinks ? linkPattern : 0);
 
     if (hasLinks) {
