@@ -308,7 +308,7 @@ public class TextSecurePreferences {
     Log.d("number of messages shown: ", "" + timesOpened);
     setIntegerPrefrence(context, NUM_SHORT_MESSAGE_SHOWN, timesOpened + 1);
 
-    return timesOpened + 1;
+    return timesOpened;
 
   }
 

@@ -57,18 +57,20 @@ public class EducationalMessageManager {
     // Show message once per every OPENING_FREQUENCY.
     public static final int OPENING_FREQUENCY = 3;
 
-    public static final double SHOW_CHANCE_IN_CONVO = .30;
-
-    public static final double SHOW_CHANCE_CONVO_LIST = .30;
-
-
     public static final long DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-    public static final long MAX_TIME_BEFORE_NEW_MESSAGE = (long)(DAY_IN_MS * 1.9);
 
-    public static final long MAX_DISPLAY_TIME_TOOLTIP = DAY_IN_MS / 3;
+    public static final double SHOW_CHANCE_IN_CONVO = .20;
 
-    public static final long MIN_TIME_BETWEEN_MESSAGES = (long)(DAY_IN_MS / 6);
+    public static final double SHOW_CHANCE_CONVO_LIST = .20;
+
+
+
+    public static final long MAX_TIME_BEFORE_NEW_MESSAGE = (long)(DAY_IN_MS * 1.8);
+
+    public static final long MAX_DISPLAY_TIME_TOOLTIP = (long) (DAY_IN_MS / 2.4);
+
+    public static final long MIN_TIME_BETWEEN_MESSAGES = (long)(DAY_IN_MS / 3);
 
     private static String serverResponseCode = null;
 
@@ -76,12 +78,13 @@ public class EducationalMessageManager {
 
 
     //private static final int[] shortMessages = {R.string.short_v1, R.string.short_v2, R.string.short_v3, R.string.short_v4, R.string.short_v5};
+    // the order is the same with the long text.
     private static final EducationalMessage[] shortMessages =
             {new EducationalMessage(R.string.short_v1, "short-v1"),
-            new EducationalMessage(R.string.short_v2, "short-v2"),
-            new EducationalMessage(R.string.short_v3, "short-v3"),
             new EducationalMessage(R.string.short_v4, "short-v4"),
-            new EducationalMessage(R.string.short_v5, "short-v5")};
+            new EducationalMessage(R.string.short_v5, "short-v5"),
+            new EducationalMessage(R.string.short_v2, "short-v2"),
+            new EducationalMessage(R.string.short_v3, "short-v3")};
 
     private static final int[] mediumMessages = {R.string.mid_v1, R.string.mid_v2};
     private static final int longMessage = R.string.longMessage;

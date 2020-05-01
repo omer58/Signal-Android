@@ -237,10 +237,12 @@ public class CreateProfileActivity extends BaseActionBarActivity {
 
 
     if( TextSecurePreferences.isExperimentalGroup(getApplicationContext())){
+
       shortMessage = EducationalMessageManager.getShortMessage(getApplicationContext());
       descriptionText.setText(shortMessage.getStringID());
 
-      //need to send notifications.
+      TextSecurePreferences.setLastMessageShownTime( getApplicationContext(), GregorianCalendar.getInstance().getTime().getTime());
+
     } else {
       descriptionText.setText(R.string.setup_profile_control);
     }
