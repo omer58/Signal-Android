@@ -1,4 +1,4 @@
-#TextLight
+# TextLight
 A modified version of the Signal messaging app that includes privacy nudges. Only intended to be used as part of a research study.
 
 ## Documentation
